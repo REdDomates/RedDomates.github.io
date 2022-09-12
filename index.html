@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="style.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #E6E6E6;
+        }
+
+        #container {
+            margin-top: 25%;
+            text-align: center
+        }
+
+        #info {
+            background-color: #666666;
+            width: 25%;
+            margin: auto;
+            color: #E6E6E6;
+            padding: 12px 22px;
+            font-size: 18px;
+            margin-bottom: 22px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        #warning {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            text-align: center;
+            color: red;
+            font-size: 25px;
+            display: none;
+        }
+
+        #button {
+            padding: 9px 17px;
+            background-color: #3C9AE8;
+            border: none;
+            cursor: pointer;
+            color: white;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="warning">
+        <p>warning</p>
+        <p></p>
+    </div>
+    <div id="container">
+        <div id="info">Lorem, ipsum.</div>
+        <div class="inputs">
+            <label for="inputEn">EN </label>
+            <input id="inputEn" type="text" name="inputEN" value="">
+            <br><br>
+            <label for="inputTr">TR </label>
+            <input id="inputTr" type="text" name="inputTR" value="">
+            <br><br>
+            <button id="button" onclick="readInputs()">Send</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
