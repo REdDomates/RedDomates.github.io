@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        input {
+            border: none;
+            outline: none;
+            border-bottom: 1px solid black;
+            margin-bottom: 22px;
+            margin-top: 22px;
+            padding: 12px 0;
+            font-size: 1.2rem;
+        }
+
+        input:focus {
+            border-color: #0c8b00;
+        }
+
+        select {
+            width: 40%;
+            padding: 12px 0;
+            border: none;
+            background-color: transparent;
+            border-bottom: 1px solid black;
+            outline: none;
+        }
+
+        option {
+            width: 50%;
+            padding: 12px 0;
+            border: none;
+            background-color: transparent;
+            border-bottom: 1px solid black;
+            outline: none;
+            color: #0c8b00;
+        }
+
+
+        .inputs {
+            width: 300px;
+            border: 2px solid rgb(226, 226, 226);
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 1px 4px 8px 0px rgba(0, 0, 0, 0.2);
+            margin-bottom: 3px;
+        }
+
+        .result {
+            width: 300px;
+            border: 2px solid rgb(226, 226, 226);
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 1px 4px 16px 0px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="inputs">
+            <p style="font-size:33px;">Exchange API - Currency App</p>
+            <form id="formk">
+                <input id="amount" type="number" placeholder="Amount" min="1">
+                <br>
+                <select name="" id="firstCurrency">
+                    <option selecte>USD</option>
+                    <option>EUR</option>
+                    <option>TRY</option>
+                    <option>JPY</option>
+                </select>
+                <span>to</span>
+                <select name="" id="secondCurrency">
+                    <option selecte>TRY</option>
+                    <option>USD</option>
+                    <option>EUR</option>
+                    <option>JPY</option>
+                </select>
+            </form>
+        </div>
+        <div class="result">
+            <span id="span-1">USD</span> - <span id="span-2">TRY</span>
+            <input type="text" id="result-input" placeholder="Result" readonly>
+        </div>
+    </div>
+
+    <script src="ui.js"></script>
+    <script src="currentcy.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
