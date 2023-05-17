@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <!-- Bootstrap CSS -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+            crossorigin="anonymous"
+        />
+
+        <title>Home</title>
+    </head>
+
+    <body>
+        <div class="container">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link active" href="./">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./box1.html">Box 1</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./box2.html">Box 2</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./box3">Box 3</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./box4">Box 4</a>
+                </li>
+            </ul>
+
+            <div class="input-group mb-3 mt-5">
+                <span class="input-group-text">Terim</span>
+                <input type="text" class="form-control" id="term-input" />
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Tanim</span>
+                <input type="text" class="form-control" id="definition-input" />
+            </div>
+            <button
+                type="button"
+                class="btn btn-primary btn-lg"
+                id="add-button"
+            >
+                Ekle
+            </button>
+        </div>
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"
+        ></script>
+
+        <script>
+            const termInput = document.getElementById("term-input");
+            const definitionInput = document.getElementById("definition-input");
+            const addButton = document.getElementById("add-button");
+
+            addButton.addEventListener("click", handleClick);
+            definitionInput.addEventListener("keydown", handleKeyDown);
+
+            initializeLocalStorage();
+
+            function initializeLocalStorage() {
+                if (!localStorage.getItem("box1")) {
+                    localStorage.setItem("box1", "[]");
+                }
+
+                if (!localStorage.getItem("box2")) {
+                    localStorage.setItem("box2", "[]");
+                }
+
+                if (!localStorage.getItem("box3")) {
+                    localStorage.setItem("box3", "[]");
+                }
+
+                if (!localStorage.getItem("box4")) {
+                    localStorage.setItem("box4", "[]");
+                }
+            }
+
+            function handleKeyDown(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    handleClick();
+                }
+            }
+
+            function setWordToStorage(term, definition) {
+                const box1 = JSON.parse(localStorage.getItem("box1"));
+
+                if (!term && !definition) {
+                    addAlert("warning", "Lutfen alani doldurunuz.");
+                    return;
+                }
+
+                for (const word of box1) {
+                    if (word.term === term) {
+                        addAlert("warning", "Bu kelime zaten mevcut.");
+                        return;
+                    }
+                }
+
+                const newWord = {
+                    term,
+                    definition,
+                    score: 0,
+                };
+
+                localStorage.setItem(
+                    "box1",
+                    JSON.stringify([...box1, newWord])
+                );
+
+                addAlert("success", "kelime basari ile eklendi.");
+                clearInputsValue();
+            }
+
+            function handleClick() {
+                const term = termInput.value;
+                const definition = definitionInput.value;
+                setWordToStorage(term, definition);
+            }
+
+            function clearInputsValue() {
+                termInput.value = "";
+                definitionInput.value = "";
+                termInput.focus();
+            }
+
+            function addAlert(alertType, text) {
+                const alertContent = document.getElementById("alertContent");
+
+                if (alertContent) {
+                    return;
+                }
+
+                const alertDoc = `<div class="container alert alert-${alertType} mt-3" role="alert" id="alertContent">
+                      ${text}
+                    </div>`;
+
+                document.body.insertAdjacentHTML("beforeend", alertDoc);
+
+                setTimeout(function () {
+                    const alertContent =
+                        document.getElementById("alertContent");
+                    if (alertContent) {
+                        alertContent.remove();
+                    }
+                }, 4000);
+            }
+        </script>
+    </body>
+</html>
