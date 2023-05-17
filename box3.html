@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <!-- Bootstrap CSS -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+            crossorigin="anonymous"
+        />
+
+        <title>Box 3</title>
+    </head>
+    <body>
+        <div class="container">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link active" href="./">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./box1.html">Box 1</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./box2.html">Box 2</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./box3.html">Box 3</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./box4.html">Box 4</a>
+                </li>
+            </ul>
+
+            <div class="text-center mt-5">
+                <h1 id="term">Hello, world!</h1>
+                <h2 class="display-1" id="definition">Hello, world!</h2>
+                <div>
+                    <input type="text" id="text-input" />
+                </div>
+            </div>
+        </div>
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"
+        ></script>
+        <script>
+            const termElement = document.getElementById("term");
+            const definitionElement = document.getElementById("definition");
+            const textInput = document.getElementById("text-input");
+
+            let box3 = JSON.parse(localStorage.getItem("box3"));
+            let currentBoxListObj;
+            let currentBoxListIndex;
+
+            initialize();
+
+            function initialize() {
+                addWordList();
+                getNextWord();
+                textInput.addEventListener("input", handleInputChange);
+                textInput.addEventListener("keydown", handleInputKeyDown);
+            }
+
+            function handleInputChange(event) {
+                setTermText(event.target.value);
+            }
+
+            function handleInputKeyDown(event) {
+                if (event.key === "Enter") {
+                    const word = event.target.value.trim();
+                    if (checkWord(word)) {
+                        handleCorrectWord();
+                    } else {
+                        handleIncorrectWord();
+                    }
+                    localStorage.setItem("box3", JSON.stringify(box3));
+                    document.getElementById("word-list").remove();
+                    addWordList();
+                }
+            }
+
+            function handleCorrectWord() {
+                box3[currentBoxListIndex].score += 1;
+                if (box3[currentBoxListIndex].score > 150) {
+                    moveWordToBox4();
+                }
+                getNextWord();
+                clearInput();
+            }
+
+            function handleIncorrectWord() {
+                box3[currentBoxListIndex].score -= 5;
+                showIncorrectDefinition();
+                textInput.disabled = true;
+                setTimeout(() => {
+                    hideIncorrectDefinition();
+                    textInput.disabled = false;
+                    getNextWord();
+                    clearInput();
+                    textInput.focus();
+                }, 3000);
+            }
+
+            function moveWordToBox4() {
+                const box4 = JSON.parse(localStorage.getItem("box4")) || [];
+                box4.push(box3[currentBoxListIndex]);
+                localStorage.setItem("box4", JSON.stringify(box4));
+                box3.splice(currentBoxListIndex, 1);
+            }
+
+            function getRandomElementFromArray(array) {
+                const randomIndex = Math.floor(Math.random() * array.length);
+                return { obj: array[randomIndex], index: randomIndex };
+            }
+
+            function setDefinitionText(text) {
+                termElement.textContent = text;
+            }
+
+            function setTermText(text) {
+                definitionElement.textContent = text || "      -        ";
+            }
+
+            function checkWord(word) {
+                return currentBoxListObj.term === word;
+            }
+
+            function getNextWord() {
+                const nextObj = getRandomElementFromArray(
+                    JSON.parse(localStorage.getItem("box3"))
+                );
+                currentBoxListObj = nextObj.obj;
+                currentBoxListIndex = nextObj.index;
+
+                setDefinitionText(currentBoxListObj.definition);
+                setTermText("");
+            }
+
+            function clearInput() {
+                textInput.value = "";
+            }
+
+            function showIncorrectDefinition() {
+                definitionElement.textContent = currentBoxListObj.term;
+                definitionElement.classList.add("text-danger");
+            }
+
+            function hideIncorrectDefinition() {
+                definitionElement.classList.remove("text-danger");
+            }
+            function addWordList() {
+                const foo = JSON.parse(localStorage.getItem("box1"));
+                let liText = "";
+
+                for (var i of foo) {
+                    console.log(i);
+                    liText += `                <li class="list-group-item d-flex justify-content-between align-items-center">
+        ${i.term}
+        <span>${i.definition}</span>
+        <span class="badge bg-primary rounded-pill">${i.score}</span>
+    </li>`;
+                }
+                const htmlElement = `
+<div class="text-center mt-4 container w-50" id="word-list">
+<p>
+<button
+    class="btn btn-primary"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#collapseExample"
+    aria-expanded="false"
+    aria-controls="collapseExample"
+>
+    Kelimeleri göster
+</button>
+</p>
+<div class="collapse" id="collapseExample">
+<ul class="list-group">
+    ${liText}
+</ul>
+</div>
+</div>
+`;
+                const container = document.querySelector("body"); // Sayfanın sonuna eklemek için uygun bir konteyner seçin, burada "body" kullanılmıştır.
+                container.insertAdjacentHTML("beforeend", htmlElement);
+            }
+        </script>
+    </body>
+</html>
