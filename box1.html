@@ -93,7 +93,7 @@
                     } else {
                         handleIncorrectWord();
                     }
-                    speakWord(currentBoxListObj.term);
+                    
 
                     localStorage.setItem("box1", JSON.stringify(box1));
                     document.getElementById("word-list").remove();
@@ -154,6 +154,7 @@
             }
 
             function getNextWord() {
+                speakWord(currentBoxListObj.term);
                 const nextObj = getRandomElementFromArray(
                     JSON.parse(localStorage.getItem("box1"))
                 );
