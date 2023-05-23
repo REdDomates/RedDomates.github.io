@@ -154,12 +154,13 @@
             }
 
             function getNextWord() {
-                speakWord(currentBoxListObj.term);
+                
                 const nextObj = getRandomElementFromArray(
                     JSON.parse(localStorage.getItem("box1"))
                 );
                 currentBoxListObj = nextObj.obj;
                 currentBoxListIndex = nextObj.index;
+                speakWord(currentBoxListObj.term);
 
                 setDefinitionText(currentBoxListObj.definition);
                 setTermText("");
