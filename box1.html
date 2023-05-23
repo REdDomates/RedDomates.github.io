@@ -53,6 +53,8 @@
             const termElement = document.getElementById("term");
             const definitionElement = document.getElementById("definition");
             const textInput = document.getElementById("text-input");
+            
+            const synthesis = window.speechSynthesis;
 
             let box1 = JSON.parse(localStorage.getItem("box1"));
             let currentBoxListObj;
@@ -60,6 +62,16 @@
 
             initialize();
 
+            function speakWord(word) {
+                // Yeni bir konuşma nesnesi oluşturun
+                const utterance = new SpeechSynthesisUtterance(word);
+
+                // Konuşma nesnesini İngilizce olarak ayarlayın
+                utterance.lang = 'en-US';
+
+                // Konuşma nesnesini çal
+                synthesis.speak(utterance);
+            }
             function initialize() {
                 getNextWord();
                 addWordList();
@@ -81,6 +93,7 @@
                     } else {
                         handleIncorrectWord();
                     }
+                    speakWord(word);
 
                     localStorage.setItem("box1", JSON.stringify(box1));
                     document.getElementById("word-list").remove();
