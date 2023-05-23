@@ -93,7 +93,7 @@
                     } else {
                         handleIncorrectWord();
                     }
-                    speakWord(word);
+                    speakWord(currentBoxListObj.term);
 
                     localStorage.setItem("box1", JSON.stringify(box1));
                     document.getElementById("word-list").remove();
