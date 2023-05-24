@@ -66,7 +66,16 @@
                 textInput.addEventListener("input", handleInputChange);
                 textInput.addEventListener("keydown", handleInputKeyDown);
             }
+            function speakWord(word) {
+                // Yeni bir konuşma nesnesi oluşturun
+                const utterance = new SpeechSynthesisUtterance(word);
 
+                // Konuşma nesnesini İngilizce olarak ayarlayın
+                utterance.lang = 'en-US';
+
+                // Konuşma nesnesini çal
+                synthesis.speak(utterance);
+            }
             function handleInputChange(event) {
                 setTermText(event.target.value);
             }
@@ -74,6 +83,7 @@
             function handleInputKeyDown(event) {
                 if (event.key === "Enter") {
                     const word = event.target.value.trim();
+                    speakWord(currentBoxListObj.term);
                     if (checkWord(word)) {
                         handleCorrectWord();
                     } else {
@@ -92,7 +102,7 @@
             }
 
             function handleIncorrectWord() {
-                box3[currentBoxListIndex].score -= 5;
+                box3[currentBoxListIndex].score -= 7;
                 showIncorrectDefinition();
                 textInput.disabled = true;
                 setTimeout(() => {
@@ -146,7 +156,7 @@
             }
 
             function addWordList() {
-                const foo = JSON.parse(localStorage.getItem("box1"));
+                const foo = JSON.parse(localStorage.getItem("box4"));
                 let liText = "";
 
                 for (var i of foo) {
