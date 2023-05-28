@@ -106,12 +106,11 @@
                         !box1[currentBoxListIndex].hasOwnProperty("sentences")
                     ) {
                         box1[currentBoxListIndex].sentences = [];
-                    } else {
-                        box1[currentBoxListIndex].sentences = [
-                            ...box1[currentBoxListIndex].sentences,
-                            sentence,
-                        ];
                     }
+                    box1[currentBoxListIndex].sentences = [
+                        ...box1[currentBoxListIndex].sentences,
+                        sentence,
+                    ];
 
                     localStorage.setItem("box1", JSON.stringify([...box1]));
                     clearInput();
