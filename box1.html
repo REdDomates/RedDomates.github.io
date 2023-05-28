@@ -39,7 +39,14 @@
                 <h1 id="term">Hello, world!</h1>
                 <h2 class="display-1" id="definition">Hello, world!</h2>
                 <div>
-                    <input type="text" id="text-input" />
+                    <input type="text" id="text-input" placeholder="word" />
+                </div>
+                <div>
+                    <input
+                        type="text"
+                        id="sentence-text-input"
+                        placeholder="sentence"
+                    />
                 </div>
             </div>
         </div>
@@ -53,7 +60,10 @@
             const termElement = document.getElementById("term");
             const definitionElement = document.getElementById("definition");
             const textInput = document.getElementById("text-input");
-            
+            const sentenceTextInput = document.getElementById(
+                "sentence-text-input"
+            );
+
             const synthesis = window.speechSynthesis;
 
             let box1 = JSON.parse(localStorage.getItem("box1"));
@@ -67,7 +77,7 @@
                 const utterance = new SpeechSynthesisUtterance(word);
 
                 // Konuşma nesnesini İngilizce olarak ayarlayın
-                utterance.lang = 'en-US';
+                utterance.lang = "en-US";
 
                 // Konuşma nesnesini çal
                 synthesis.speak(utterance);
@@ -75,9 +85,39 @@
             function initialize() {
                 getNextWord();
                 addWordList();
+                addSentenceList();
 
                 textInput.addEventListener("input", handleInputChange);
                 textInput.addEventListener("keydown", handleInputKeyDown);
+                sentenceTextInput.addEventListener(
+                    "keydown",
+                    handleSentenceInputKeyDown
+                );
+            }
+
+            function handleSentenceInputKeyDown(event) {
+                if (event.key === "Enter") {
+                    const sentence = event.target.value;
+
+                    console.log(currentBoxListObj.term);
+                    console.log(currentBoxListIndex);
+
+                    if (
+                        !box1[currentBoxListIndex].hasOwnProperty("sentences")
+                    ) {
+                        box1[currentBoxListIndex].sentences = [];
+                    } else {
+                        box1[currentBoxListIndex].sentences = [
+                            ...box1[currentBoxListIndex].sentences,
+                            sentence,
+                        ];
+                    }
+
+                    localStorage.setItem("box1", JSON.stringify([...box1]));
+                    clearInput();
+                    document.getElementById("sentences-list").remove();
+                    addSentenceList();
+                }
             }
 
             function handleInputChange(event) {
@@ -94,11 +134,12 @@
                     } else {
                         handleIncorrectWord();
                     }
-                    
 
                     localStorage.setItem("box1", JSON.stringify(box1));
                     document.getElementById("word-list").remove();
+                    document.getElementById("sentences-list").remove();
                     addWordList();
+                    addSentenceList();
                 }
             }
 
@@ -155,13 +196,11 @@
             }
 
             function getNextWord() {
-                
                 const nextObj = getRandomElementFromArray(
                     JSON.parse(localStorage.getItem("box1"))
                 );
                 currentBoxListObj = nextObj.obj;
                 currentBoxListIndex = nextObj.index;
-                
 
                 setDefinitionText(currentBoxListObj.definition);
                 setTermText("");
@@ -169,6 +208,7 @@
 
             function clearInput() {
                 textInput.value = "";
+                sentenceTextInput.value = "";
             }
 
             function showIncorrectDefinition() {
@@ -207,6 +247,43 @@
 </button>
 </p>
 <div class="collapse" id="collapseExample">
+<ul class="list-group">
+    ${liText}
+</ul>
+</div>
+</div>
+`;
+                const container = document.querySelector("body"); // Sayfanın sonuna eklemek için uygun bir konteyner seçin, burada "body" kullanılmıştır.
+                container.insertAdjacentHTML("beforeend", htmlElement);
+            }
+
+            function addSentenceList() {
+                const foo = JSON.parse(localStorage.getItem("box1"));
+                let liText = "";
+
+                foo[currentBoxListIndex].sentences.map((e) => {
+                    console.log(e);
+                    liText += `                <li class="list-group-item d-flex justify-content-between align-items-center">
+        ${e}
+        
+    </li>`;
+                });
+
+                const htmlElement = `
+<div class="text-center mt-4 container w-50" id="sentences-list">
+<p>
+<button
+    class="btn btn-primary"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#collapseExamples"
+    aria-expanded="false"
+    aria-controls="collapseExamples"
+>
+    Cumleleri göster
+</button>
+</p>
+<div class="collapse" id="collapseExamples">
 <ul class="list-group">
     ${liText}
 </ul>
