@@ -51,6 +51,24 @@
             </div>
         </div>
 
+        <button
+            type="button"
+            class="btn btn-primary"
+            onclick="handleSentenceAddClick()"
+            style="position: fixed; bottom: 20px; right: 20px"
+        >
+            Add Sentence
+        </button>
+
+        <button
+            type="button"
+            class="btn btn-primary"
+            onclick="handleWordAddClick()"
+            style="position: fixed; bottom: 20px; left: 20px"
+        >
+            Add word
+        </button>
+
         <script
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
@@ -95,12 +113,43 @@
                 );
             }
 
+            function handleWordAddClick() {
+                const word = textInput.value.trim();
+
+                speakWord(currentBoxListObj.term);
+                if (checkWord(word)) {
+                    handleCorrectWord();
+                } else {
+                    handleIncorrectWord();
+                }
+
+                localStorage.setItem("box1", JSON.stringify(box1));
+                document.getElementById("word-list").remove();
+                document.getElementById("sentences-list").remove();
+                addWordList();
+                addSentenceList();
+            }
+
+            function handleSentenceAddClick() {
+                const sentence = sentenceTextInput.value;
+
+                if (!box1[currentBoxListIndex].hasOwnProperty("sentences")) {
+                    box1[currentBoxListIndex].sentences = [];
+                }
+                box1[currentBoxListIndex].sentences = [
+                    ...box1[currentBoxListIndex].sentences,
+                    sentence,
+                ];
+
+                localStorage.setItem("box1", JSON.stringify([...box1]));
+                clearInput();
+                document.getElementById("sentences-list").remove();
+                addSentenceList();
+            }
+
             function handleSentenceInputKeyDown(event) {
                 if (event.key === "Enter") {
                     const sentence = event.target.value;
-
-                    console.log(currentBoxListObj.term);
-                    console.log(currentBoxListIndex);
 
                     if (
                         !box1[currentBoxListIndex].hasOwnProperty("sentences")
@@ -269,7 +318,7 @@
                 });
 
                 const htmlElement = `
-<div class="text-center mt-4 container w-50" id="sentences-list">
+<div class="text-center mt-4 container w-75" id="sentences-list">
 <p>
 <button
     class="btn btn-primary"
