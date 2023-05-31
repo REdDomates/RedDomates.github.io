@@ -100,7 +100,7 @@
 
             function handleCorrectWord() {
                 box3[currentBoxListIndex].score += 1;
-                if (box3[currentBoxListIndex].score > 150) {
+                if (box3[currentBoxListIndex].score > 75) {
                     moveWordToBox4();
                 }
                 getNextWord();
@@ -108,7 +108,7 @@
             }
 
             function handleIncorrectWord() {
-                box3[currentBoxListIndex].score -= 5;
+                box3[currentBoxListIndex].score -= 10;
                 showIncorrectDefinition();
                 textInput.disabled = true;
                 setTimeout(() => {
