@@ -194,7 +194,7 @@
             function handleCorrectWord() {
                 box1[currentBoxListIndex].score += 1;
 
-                if (box1[currentBoxListIndex].score > 40) {
+                if (box1[currentBoxListIndex].score > 30) {
                     moveWordToBox2();
                 }
 
@@ -203,7 +203,7 @@
             }
 
             function handleIncorrectWord() {
-                box1[currentBoxListIndex].score -= 2;
+                box1[currentBoxListIndex].score -= 3;
 
                 showIncorrectDefinition();
 
